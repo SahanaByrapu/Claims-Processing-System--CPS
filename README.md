@@ -7,10 +7,10 @@
          │             │                            │             │
 |--------------------|--------------------|-----------------------------|----------------|
 | Patient 360 Dashboard | Doctor Portal  |           Risk / Forecast Dashboard  |Admin Console |
+|----------------------|-----------------|-------------------------------|--------------------|
 | - Patient profile    |   - Appointment scheduling | - Disease trends      |    - Access control|
 | - Medical history    |   - Lab results |           - Hospital capacity    |   - Audit logs|
-| - Medication alerts  |  - Notes        |         - Resource utilization   |
-|---------------------|------------------|------------------------------|----------------|
+| - Medication alerts  |  - Notes        |         - Resource utilization   |  |
                                       │
                                       ▼
                              ┌───────────────┐

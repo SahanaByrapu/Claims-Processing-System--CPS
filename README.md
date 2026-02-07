@@ -1,47 +1,47 @@
-                        ┌──────────────────────────────┐
-                        │         Frontend Layer        │
-                        │  React dashboards / portals   │
-                        └─────────────┬────────────────┘
-                                      │
-         ┌─────────────┬──────────────┴─────────────┬─────────────┐
-         │             │                            │             │
-|--------------------|--------------------|-----------------------------|----------------|
-| Patient 360 Dashboard | Doctor Portal  |           Risk / Forecast Dashboard  |Admin Console |
-|----------------------|-----------------|-------------------------------|--------------------|
-| - Patient profile    |   - Appointment scheduling | - Disease trends      |    - Access control|
-| - Medical history    |   - Lab results |           - Hospital capacity    |   - Audit logs|
-| - Medication alerts  |  - Notes        |         - Resource utilization   |  |
-                                      │
-                                      ▼
-                             ┌───────────────┐
-                             │ API Gateway    │
-                             │ Auth / RBAC    │
-                             │ Rate-limiting │
-                             └──────┬────────┘
-                                    │
-                                    ▼
-                          ┌──────────────────────┐
-                          │ Backend Services     │
-                          │ - Patient Records    │
-                          │ - Appointments       │
-                          │ - Billing            │
-                          │ - Workflow Engine    │
-                          └──────────┬───────────┘
-                                     │
-                   ┌─────────────────┴─────────────────┐
-                   │                                   │
-          ┌────────▼────────┐                 ┌────────▼────────┐
-          │ ML Serving Layer │                 │ Data Layer      │
-          │ - Risk Scoring   │                 │ - Postgres      │
-          │ - Forecasting    │                 │ - MongoDB       │
-          │ - NLP / Summaries│                │ - S3 Storage    │
-          └────────┬─────────┘                 └────────┬────────┘
-                   │                                   │
-                   ▼                                   ▼
-           ┌─────────────┐                     ┌─────────────┐
-           │ ML Pipelines │                     │ Monitoring &│
-           │ ETL → Train  │                     │ Observability│
-           │ → Deploy     │                     │ Prometheus /│
-           │ Risk + NLP   │                     │ Grafana /   │
-           └─────────────┘                     │ Logging     │
-                                               └─────────────┘
+                    ┌────────────────────────────┐
+                    │        Frontend Layer       │
+                    │  React / Next.js Portals   │
+                    └─────────────┬─────────────┘
+                                  │
+      ┌─────────────┬─────────────┴─────────────┬─────────────┐
+      │             │                           │             │
+ | Claims Portal |  Adjuster Dashboard |     Fraud Analytics UI  | Admin Console|
+ |-------------- | ------------------- | ---------------------   | ------------ |
+ | - Submit claim | - Review cases     |       - Risk scores     |   - RBAC     |
+ | - Upload docs  | - Approve/reject   |     - Alerts            |  - Audit logs |
+ | - Track status | - Notes & workflow |    - Trends             | - Compliance |
+
+                                  │
+                                  ▼
+                         ┌───────────────┐
+                         │ API Gateway    │
+                         │ Auth / RBAC    │
+                         └──────┬────────┘
+                                │
+                                ▼
+                    ┌────────────────────────┐
+                    │ Backend Microservices  │
+                    │ - Claims Service      │
+                    │ - Policy Service      │
+                    │ - Payments Service    │
+                    │ - Document Service    │
+                    │ - Workflow Engine     │
+                    └──────────┬───────────┘
+                               │
+        ┌──────────────────────┴──────────────────────┐
+        │                                             │
+┌───────▼────────┐                          ┌─────────▼────────┐
+│ ML Serving     │                          │ Data Layer        │
+│ - Fraud Model  │                          │ - Postgres        │
+│ - Approval ML  │                          │ - MongoDB         │
+│ - Cost Estimator│                         │ - S3 (docs/images)│
+│ - NLP Extractor│                          │ - Vector DB       │
+└───────┬────────┘                          └─────────┬────────┘
+        │                                             │
+        ▼                                             ▼
+┌───────────────┐                           ┌─────────────────┐
+│ ML Pipelines  │                           │ Observability    │
+│ ETL → Train → │                           │ Prometheus       │
+│ Deploy        │                           │ Grafana          │
+│ Fraud / NLP   │                           │ Logging / Alerts │
+└───────────────┘                           └─────────────────┘

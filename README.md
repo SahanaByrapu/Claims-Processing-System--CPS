@@ -47,38 +47,4 @@
 └───────────────┘                           └─────────────────┘
 
 
-### FrontEnd Project Structure
 
-claims-frontend/
-│
-├── src/
-│   ├── layouts/
-│   │    ├── MainLayout.jsx
-│   │    ├── AdminLayout.jsx
-│   │
-│   ├── pages/
-│   │    ├── claims/
-│   │    │     ├── ClaimsPortal.jsx
-│   │    │     ├── ClaimDetails.jsx
-│   │    │
-│   │    ├── adjuster/
-│   │    │     ├── AdjusterDashboard.jsx
-│   │    │     ├── CaseQueue.jsx
-│   │    │
-│   │    ├── fraud/
-│   │    │     ├── FraudAnalytics.jsx
-│   │    │
-│   │    ├── admin/
-│   │    │     ├── AdminConsole.jsx
-│   │
-│   ├── components/
-│   │    ├── Sidebar.jsx
-│   │    ├── Navbar.jsx
-│   │    ├── DataTable.jsx
-│   │    ├── Charts.jsx
-│   │
-│   ├── router/
-│   │    ├── AppRouter.jsx
-│   │
-│   ├── App.jsx
-│   └── main.jsx

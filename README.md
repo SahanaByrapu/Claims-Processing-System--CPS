@@ -25,7 +25,7 @@ Create a Claims Processing System using React as frontend covering:
 - **Backend**: FastAPI, MongoDB, JWT auth
 - **Storage**: AWS S3 (amzn-s3-claims bucket)
 - **AI**: OpenAI GPT-5.2 via LLM Integration
-- **Email**: SendGrid (pending credentials)
+- **Email**: SendGrid
 
 ## What's Been Implemented
 ### Backend 

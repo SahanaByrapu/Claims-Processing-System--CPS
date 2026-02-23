@@ -19,6 +19,10 @@ from io import BytesIO
 import mimetypes
 import asyncio
 
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
@@ -542,20 +546,7 @@ async def download_document(claim_id: str, doc_id: str, user: dict = Depends(get
         raise HTTPException(status_code=500, detail="Failed to download document")
 
 # ==================== FRAUD ANALYSIS ====================
-
-async def analyze_fraud(claim_id: str):
-    """Analyze claim for potential fraud using OpenAI GPT-5.2"""
-    try:
-        claim = await db.claims.find_one({"id": claim_id}, {"_id": 0})
-        if not claim:
-            return
-        
-        from emergentintegrations.llm.chat import LlmChat, UserMessage
-        
-        chat = LlmChat(
-            api_key=os.environ.get('EMERGENT_LLM_KEY'),
-            session_id=f"fraud-analysis-{claim_id}",
-            system_message="""You are an insurance fraud detection expert. Analyze the claim details and provide:
+""" You are an insurance fraud detection expert. Analyze the claim details and provide:
 1. A risk score from 0-100 (0=no risk, 100=high risk)
 2. Key risk indicators found
 3. Recommendation (approve/review/reject)
@@ -567,18 +558,56 @@ Respond in JSON format:
     "recommendation": "approve|review|reject",
     "analysis_summary": "brief explanation"
 }"""
-        ).with_model("openai", "gpt-5.2")
+async def analyze_fraud(claim_id: str):
+    """Analyze claim for potential fraud using OpenAI GPT-5.2"""
+    try:
+        claim = await db.claims.find_one({"id": claim_id}, {"_id": 0})
+        if not claim:
+            return
         
-        prompt = f"""Analyze this insurance claim for potential fraud:
-- Claim Type: {claim['claim_type']}
-- Amount: ${claim['amount']}
-- Incident Date: {claim['incident_date']}
-- Description: {claim['description']}
-- Policy Number: {claim['policy_number']}
-"""
+        chat_instance = ChatOpenAI(
+        model="gpt-4o",   # or gpt-4.1
+        api_key=OPENAI_API_KEY,
+        temperature=0.7
+         )
+
+        messages = [
+        SystemMessage(content=system_prompt),
+        HumanMessage(content=user_prompt)
+         ]
+
         
-        response = await chat.send_message(UserMessage(text=prompt))
+    except Exception as e:
+        logging.error(f"Error calling LLM: {e}")
+        response_text = (
+        "I apologize, but I encountered an error processing your request. "
+        f"Please try again. Error: {str(e)}"
+        )
         
+        prompt = f"""You are an insurance fraud detection expert. Analyze the claim details and provide:
+                    1. A risk score from 0-100 (0=no risk, 100=high risk)
+                    2. Key risk indicators found
+                    3. Recommendation (approve/review/reject)
+
+                    Respond in JSON format:
+                   {
+                    "risk_score": <number>,
+                    "risk_indicators": ["indicator1", "indicator2"],
+                     "recommendation": "approve|review|reject",
+                        "analysis_summary": "brief explanation"
+                    }
+        
+                Analyze this insurance claim for potential fraud:
+                - Claim Type: {claim['claim_type']}
+                - Amount: ${claim['amount']}
+                - Incident Date: {claim['incident_date']}
+                - Description: {claim['description']}
+                - Policy Number: {claim['policy_number']}
+                """
+        
+        response = await chat_instance.ainvoke(messages)
+        response_text = response.content
+
         # Parse response
         import json
         try:
@@ -591,10 +620,10 @@ Respond in JSON format:
             
             analysis = json.loads(json_str.strip())
             risk_score = analysis.get("risk_score", 50)
-            fraud_analysis = analysis.get("analysis_summary", response)
+            fraud_analysis = analysis.get("analysis_summary", response_text)
         except:
             risk_score = 50
-            fraud_analysis = response
+            fraud_analysis = response_text
         
         # Update claim with fraud analysis
         await db.claims.update_one(

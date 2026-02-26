@@ -76,10 +76,7 @@ Create a Claims Processing System using React as frontend covering:
 2. Test S3 document upload in production
 3. Add more claim types and custom fields
 
-<img width="3416" height="2146" alt="image" src="https://github.com/user-attachments/assets/3e406d2e-cf0e-4586-9af2-bc903fe9f0cc" />
 
-
-<img width="3398" height="2156" alt="image" src="https://github.com/user-attachments/assets/bf3880ac-76e0-47be-b075-e32559410e04" />
 
 
 
